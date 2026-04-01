@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email.lower() == "alonsofarma@terra.com.br" || 
+         request.auth.token.email.lower() == "beneditoalonsoalbuquerque@gmail.com");
+    }
+
+    function isValidString(val, min, max) {
+      return val is string && val.size() >= min && val.size() <= max;
+    }
+
+    // Projects
+    match /projects/{projectId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Styles
+    match /styles/{styleId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Blog
+    match /blog/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Leads
+    match /leads/{leadId} {
+      allow create: if true; // Anyone can submit a lead
+      allow read, update, delete: if isAdmin();
+    }
+
+    // System (for connection testing)
+    match /system/{docId} {
+      allow read: if true;
+    }
+
+    // Settings
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "Project": {
+      "title": "Project",
+      "description": "Architectural project in the portfolio",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "enum": ["Residencial", "Comercial", "Institucional", "Urbanístico"] },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "renderings": { "type": "array", "items": { "type": "string" } },
+        "pdfUrl": { "type": "string" },
+        "floorPlans": { "type": "array", "items": { "type": "string" } },
+        "slug": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "slug"]
+    },
+    "Style": {
+      "title": "Architectural Style",
+      "description": "Definition and examples of an architectural style",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "architects": { "type": "string" },
+        "examples": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "slug": { "type": "string" }
+      },
+      "required": ["title", "slug"]
+    },
+    "BlogPost": {
+      "title": "Blog Post",
+      "description": "Article about architecture and trends",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "image": { "type": "string" },
+        "slug": { "type": "string" }
+      },
+      "required": ["title", "content", "slug"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Potential client inquiry from the needs form",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "city": { "type": "string" },
+        "projectType": { "type": "string" },
+        "area": { "type": "string" },
+        "style": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "phone"]
+    },
+    "Settings": {
+      "title": "Site Settings",
+      "description": "Global configuration for the website",
+      "type": "object",
+      "properties": {
+        "siteName": { "type": "string" },
+        "tagline": { "type": "string" },
+        "description": { "type": "string" },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" },
+        "socialLinks": { "type": "object" }
+      }
+    }
+  },
+  "firestore": {
+    "/projects/{projectId}": { "schema": "Project", "description": "Portfolio projects" },
+    "/styles/{styleId}": { "schema": "Style", "description": "Architectural styles catalog" },
+    "/blog/{postId}": { "schema": "BlogPost", "description": "Blog articles" },
+    "/leads/{leadId}": { "schema": "Lead", "description": "Form submissions" },
+    "/settings/global": { "schema": "Settings", "description": "Global site settings" }
+  }
+}
