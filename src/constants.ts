@@ -13,7 +13,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   socialLinks: {
     instagram: "https://instagram.com/axiarquitetura"
   },
-  heroImage: "https://placehold.co/1920x1080/f4f4f5/f4f4f5",
+  heroImage: "https://placehold.co/1920x1080/18181b/18181b",
   aboutTitle: "Transformamos sonhos em monumentos de funcionalidade.",
   aboutImage: "https://images.unsplash.com/photo-1503387762-592dee582a7b?q=80&w=1931&auto=format&fit=crop",
   stylesTitle: "Uma vitrine de possibilidades para o seu projeto.",

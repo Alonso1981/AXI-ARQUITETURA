@@ -62,7 +62,7 @@ export default function Navbar({ user }: { user: any }) {
                 isAdmin={!!user}
                 fontSize={settings.logoFontSize}
                 onFontSizeChange={(size) => settings.updateSettings({ logoFontSize: size })}
-                className={`font-bold tracking-tighter text-black`}
+                className={`font-bold tracking-tighter ${!scrolled && location.pathname === '/' ? 'text-white' : 'text-black'}`}
               />
             </motion.div>
             <motion.div
@@ -88,7 +88,7 @@ export default function Navbar({ user }: { user: any }) {
                 onSave={(val) => settings.updateSettings({ siteNameBottom: val })}
                 isAdmin={!!user}
                 fontSize={Math.max(10, (settings.logoFontSize || 24) * 0.4)}
-                className={`font-medium tracking-[0.2em] uppercase text-black/60`}
+                className={`font-medium tracking-[0.2em] uppercase ${!scrolled && location.pathname === '/' ? 'text-white/80' : 'text-black/60'}`}
               />
             </motion.div>
           </Link>
@@ -100,7 +100,7 @@ export default function Navbar({ user }: { user: any }) {
             <Link
               key={link.path}
               to={link.path}
-              className={`text-sm font-medium transition-colors hover:opacity-70 text-zinc-600 ${location.pathname === link.path ? 'opacity-100 font-semibold underline underline-offset-8' : 'opacity-80'}`}
+              className={`text-sm font-medium transition-colors hover:opacity-70 ${!scrolled && location.pathname === '/' ? 'text-white' : 'text-zinc-600'} ${location.pathname === link.path ? 'opacity-100 font-semibold underline underline-offset-8' : 'opacity-80'}`}
             >
               {link.name}
             </Link>
@@ -108,11 +108,11 @@ export default function Navbar({ user }: { user: any }) {
           
           {user ? (
             <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-zinc-200">
-              <div className={`hidden lg:block text-right text-zinc-400`}>
+              <div className={`hidden lg:block text-right ${!scrolled && location.pathname === '/' ? 'text-white/70' : 'text-zinc-400'}`}>
                 <p className="text-[10px] font-bold uppercase tracking-widest">Logado como</p>
-                <p className={`text-xs font-bold truncate max-w-[150px] text-zinc-900`}>{user.email}</p>
+                <p className={`text-xs font-bold truncate max-w-[150px] ${!scrolled && location.pathname === '/' ? 'text-white' : 'text-zinc-900'}`}>{user.email}</p>
               </div>
-              <Link to="/admin" className={`text-sm font-medium text-black`}>
+              <Link to="/admin" className={`text-sm font-medium ${!scrolled && location.pathname === '/' ? 'text-white' : 'text-black'}`}>
                 Painel
               </Link>
               <button onClick={handleLogout} className="text-zinc-400 hover:text-red-500 transition-colors">
@@ -120,7 +120,7 @@ export default function Navbar({ user }: { user: any }) {
               </button>
             </div>
           ) : (
-            <Link to="/admin/login" className={`p-2 rounded-full transition-colors text-zinc-400 hover:bg-zinc-100`}>
+            <Link to="/admin/login" className={`p-2 rounded-full transition-colors ${!scrolled && location.pathname === '/' ? 'text-white hover:bg-white/10' : 'text-zinc-400 hover:bg-zinc-100'}`}>
               <User size={20} />
             </Link>
           )}
@@ -128,7 +128,7 @@ export default function Navbar({ user }: { user: any }) {
 
         {/* Mobile Toggle */}
         <button 
-          className={`md:hidden p-2 text-black`}
+          className={`md:hidden p-2 ${!scrolled && location.pathname === '/' ? 'text-white' : 'text-black'}`}
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
