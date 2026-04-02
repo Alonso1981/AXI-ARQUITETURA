@@ -31,26 +31,6 @@ export default function Footer({ user }: { user?: any }) {
                 <Instagram size={20} />
               </a>
             )}
-            {settings.socialLinks.facebook && (
-              <a 
-                href={settings.socialLinks.facebook} 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-white transition-colors"
-              >
-                <Facebook size={20} />
-              </a>
-            )}
-            {settings.socialLinks.linkedin && (
-              <a 
-                href={settings.socialLinks.linkedin} 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-white transition-colors"
-              >
-                <Linkedin size={20} />
-              </a>
-            )}
           </div>
         </div>
 

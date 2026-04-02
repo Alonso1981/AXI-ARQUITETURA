@@ -71,8 +71,6 @@ export interface SiteSettings {
   email: string;
   socialLinks: {
     instagram?: string;
-    facebook?: string;
-    linkedin?: string;
   };
   siteNameTop: string;
   siteNameBottom: string;

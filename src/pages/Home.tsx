@@ -53,6 +53,7 @@ export default function Home({ user }: { user: any }) {
     const formData = new FormData(e.currentTarget);
     
     try {
+      // 1. Save to Firestore (Leads)
       await addDoc(collection(db, 'leads'), {
         name: formData.get('name'),
         email: formData.get('email'),
@@ -64,6 +65,27 @@ export default function Home({ user }: { user: any }) {
         createdAt: serverTimestamp(),
         status: 'new'
       });
+
+      // 2. Send Email via FormSubmit.co
+      await fetch(`https://formsubmit.co/ajax/${settings.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `Nova Solicitação de Projeto: ${formData.get('projectType')}`,
+          Nome: formData.get('name'),
+          Email: formData.get('email'),
+          Telefone: formData.get('phone'),
+          Cidade: formData.get('city'),
+          Tipo_Projeto: formData.get('projectType'),
+          Area: formData.get('area'),
+          Descricao: formData.get('description'),
+          _template: 'table'
+        })
+      });
+
       setSubmitSuccess(true);
       (e.target as HTMLFormElement).reset();
     } catch (error) {
@@ -86,7 +108,7 @@ export default function Home({ user }: { user: any }) {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center text-white">
+      <section className="relative h-screen flex items-center justify-center text-black">
         <div className="absolute inset-0 z-0">
           <Editable 
             value={settings.heroImage} 
@@ -96,7 +118,7 @@ export default function Home({ user }: { user: any }) {
             className="w-full h-full"
             editButtonClassName="top-24 right-6 !z-[60]"
           />
-          <div className="absolute inset-0 bg-black/50 z-10 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-zinc-100/10 z-10 pointer-events-none"></div>
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pointer-events-none">
@@ -147,7 +169,7 @@ export default function Home({ user }: { user: any }) {
               opacity: 1
             }}
             transition={{ duration: 0.8, opacity: { duration: 0.8 }, delay: 0.2 }}
-            className={`text-xl md:text-3xl font-light tracking-wide mb-12 text-zinc-300 pointer-events-auto ${user ? 'cursor-move' : ''}`}
+            className={`text-xl md:text-3xl font-light tracking-wide mb-12 text-zinc-600 pointer-events-auto ${user ? 'cursor-move' : ''}`}
           >
             <Editable 
               key="hero-tagline"
@@ -177,13 +199,13 @@ export default function Home({ user }: { user: any }) {
             transition={{ duration: 0.8, opacity: { duration: 0.8 }, delay: 0.4 }}
             className={`flex flex-col sm:flex-row items-center justify-center gap-4 pointer-events-auto ${user ? 'cursor-move' : ''}`}
           >
-            <Link to="/portfolio" className="bg-white text-black px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-zinc-200 transition-all w-full md:w-auto">
+            <Link to="/portfolio" className="bg-black text-white px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all w-full md:w-auto">
               Conhecer Projetos
             </Link>
-            <Link to="/estilos" className="border border-white/30 backdrop-blur-sm text-white px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-white/10 transition-all w-full md:w-auto">
+            <Link to="/estilos" className="border border-black/30 backdrop-blur-sm text-black px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-black/5 transition-all w-full md:w-auto">
               Explorar Estilos
             </Link>
-            <Link to="/contato" className="text-white text-sm font-bold uppercase tracking-widest hover:underline underline-offset-8 transition-all">
+            <Link to="/contato" className="text-black text-sm font-bold uppercase tracking-widest hover:underline underline-offset-8 transition-all">
               Entrar em contato
             </Link>
           </motion.div>
@@ -218,16 +240,6 @@ export default function Home({ user }: { user: any }) {
                 type="textarea"
                 isAdmin={!!user}
               />
-            </div>
-            <div className="grid grid-cols-2 gap-8">
-              <div>
-                <span className="block text-4xl font-bold mb-2">15+</span>
-                <span className="text-xs uppercase tracking-widest text-zinc-500">Anos de Experiência</span>
-              </div>
-              <div>
-                <span className="block text-4xl font-bold mb-2">200+</span>
-                <span className="text-xs uppercase tracking-widest text-zinc-500">Projetos Executados</span>
-              </div>
             </div>
           </motion.div>
           <motion.div

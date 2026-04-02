@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Phone, Mail, MapPin, Instagram, Facebook, Linkedin, MessageCircle, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, MessageCircle, Send } from 'lucide-react';
 import { INITIAL_SETTINGS } from '../constants';
 import { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
@@ -25,6 +25,7 @@ export default function Contact({ user }: { user: any }) {
     e.preventDefault();
     setLoading(true);
     try {
+      // 1. Save to Firestore (Leads)
       await addDoc(collection(db, 'leads'), {
         ...formData,
         description: `[CONTATO DIRETO] Assunto: ${formData.subject}\n\nMensagem: ${formData.message}`,
@@ -34,6 +35,30 @@ export default function Contact({ user }: { user: any }) {
         area: 'N/A',
         style: 'N/A'
       });
+
+      // 2. Send Email via FormSubmit.co
+      // This ensures the user receives an actual email in their inbox
+      const emailResponse = await fetch(`https://formsubmit.co/ajax/${settings.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `Novo Contato: ${formData.subject}`,
+          Nome: formData.name,
+          Email: formData.email,
+          Telefone: formData.phone,
+          Assunto: formData.subject,
+          Mensagem: formData.message,
+          _template: 'table'
+        })
+      });
+
+      if (!emailResponse.ok) {
+        console.warn('Email notification might have failed, but lead was saved to database.');
+      }
+
       setSuccess(true);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {
@@ -93,11 +118,13 @@ export default function Contact({ user }: { user: any }) {
                 <div>
                   <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-400 mb-1">E-mail</p>
                   <p className="text-xl font-bold">
-                    <Editable 
-                      value={settings.email} 
-                      onSave={(val) => settings.updateSettings({ email: val })}
-                      isAdmin={!!user}
-                    />
+                    <a href={`mailto:${settings.email}`} className="hover:underline">
+                      <Editable 
+                        value={settings.email} 
+                        onSave={(val) => settings.updateSettings({ email: val })}
+                        isAdmin={!!user}
+                      />
+                    </a>
                   </p>
                 </div>
               </div>
@@ -129,22 +156,6 @@ export default function Contact({ user }: { user: any }) {
                   className="p-4 bg-zinc-50 rounded-2xl text-zinc-400 hover:bg-black hover:text-white transition-all"
                 >
                   <Instagram size={24} />
-                </a>
-                <a 
-                  href={settings.socialLinks.facebook} 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-4 bg-zinc-50 rounded-2xl text-zinc-400 hover:bg-black hover:text-white transition-all"
-                >
-                  <Facebook size={24} />
-                </a>
-                <a 
-                  href={settings.socialLinks.linkedin} 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-4 bg-zinc-50 rounded-2xl text-zinc-400 hover:bg-black hover:text-white transition-all"
-                >
-                  <Linkedin size={24} />
                 </a>
               </div>
             </div>

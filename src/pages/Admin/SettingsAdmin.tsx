@@ -192,6 +192,19 @@ export default function SettingsAdmin() {
                 className="w-full bg-zinc-50 border-none px-4 py-3 rounded-xl focus:ring-2 focus:ring-black outline-none"
               />
             </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-zinc-500">Instagram (URL completa)</label>
+              <input 
+                type="text" 
+                value={settings.socialLinks?.instagram || ''}
+                onChange={(e) => setSettings({ 
+                  ...settings, 
+                  socialLinks: { ...settings.socialLinks, instagram: e.target.value } 
+                })}
+                className="w-full bg-zinc-50 border-none px-4 py-3 rounded-xl focus:ring-2 focus:ring-black outline-none"
+                placeholder="https://instagram.com/seu-perfil"
+              />
+            </div>
           </div>
         </div>
 
